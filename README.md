@@ -1,70 +1,36 @@
-# Getting Started with Create React App
+# 리액트로 블로그 만들고, 쇼핑몰까지 만들어보기
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## 설치과정
+1.NodeJS 설치\
+2.VScode 설치\
+3.폴더 생성 후 PowerShell 오픈\
+4.아래 명령어 치기\
+npx create-react-app 프로젝트명\
+오류 시 구글 검색으로 해결
 
-## Available Scripts
+## JSX 문법
+1.변수를 활용할 땐 {}를 사용한다.\
+2.Class를 선언할 땐 className을 사용한다\
+(class라는 문법은 이미 js에 있기 때문에)\
+3.Style을 넣고 싶으면 style = {{스타일명:"값"}} 으로 넣는다.\
+"-"기호는 이미 JS 정의 되어있기 때문에 카멜케이스로 적어야한다.\
+font-size : 20px => fontSize : "20px"\
 
-In the project directory, you can run:
 
-### `npm start`
+## State
+자주 바뀌는 변수들은 State에 담아서 활용 \
+일반 변수에다가 넣으면 재랜더링을 해주지 않음.\
+JS코드로 재랜더링 가능하지만 그냥 리액트 사용하자.\
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+let [변수명,set변수명] = useState(0); \
+위의 모습이 기본 값.\
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
 
-### `npm test`
+### array, object State 변경값
+React는 변경값을 바꿔주는 역할을 하는데, 배열이나 오브젝트는 주소를 변수에 담고 있어\
+배열 변수값을 바꿔도 주소변수 값은 바뀌지 않아 바뀌지 않는다고 판단한다.\
+해결 방법 : [...변수명]; 으로 해결 가능.\
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+copy배열변수명 = 배열변수명 하는 이유\
+기존 데이터 값을 보존하기 위한 것.\
+데이터 값을 변경했다가 원본 데이터값이 필요한 경우가 있을 수 있으므로 원본 데이터 값은 보존하자\
