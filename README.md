@@ -73,3 +73,84 @@ modal ==true ? <Modal/> : null
 이 될 수 있겠다.
 
 스위치 형식으로 하기에 OnClick에서 setModal(!modal) 로 해주면 된다.
+
+
+## map function으로 반복하기 (배열만 가능, 오브젝트 안 됨)
+기본 골자
+```
+const arr = [가,나,다];
+arr.map(function(element){
+    console.log(elemet);
+});
+```
+return으로 화면에 보이기
+```
+const arr = [가,나,다];
+const save = arr.map(function(element){
+    return elemet;
+});
+consloe.log(save);
+```
+를 하면 화면에 남겨진다. \
+변수에 저장도 가능하니 유용하게 사용할 것. \
+
+실제 사용 방법
+```
+function App (){
+  return (
+    <div>
+      { 
+        [가,나,다].map(function(element, i){
+          return ( <div>element[i]</div> )
+        }) 
+      }
+    </div>
+  )
+}
+```
+출력 : \
+가 \
+나 \
+다 \
+
+식으로 나오고, i는 map에서 지원하는 두번째 파라미터다. 0부터 시작해서 array 길이만큼 ++ 된다.
+
+
+## props를 사용하여 state를 가져오기
+Component를 사용하면 state를 가져오지 못하는 상황이 발생한다. \
+그 이유는 state를 정의한 곳이 App이라는 함수기 때문이다. \
+state는 결국 지역 변수라는 뜻. \ 
+컴포넌트도 App이외의 함수라서 못가져온다. \
+함수와 함수 사이에 데이터를 공유하는 방법은 간단하다 \
+함수 (매개변수) {} 처럼 그냥 매개변수로 받아오면 된다. \
+받아오는 방법은
+```
+<컴포넌트예요 이곳에 = "정의하면 됨." 데이터 = {다 넘길 수 있음 함수도 넘길 수 있음.}/>
+<Component title = {title} setTitle = {setTitle}/>
+```
+처럼 사용하면 된다. \
+useState의 set 함수도 같이 넘겨줄 수 있으니 매우 유용하다! \
+
+
+## 배열에 데이터 추가
+배열은 push()함수로 추가가 가능하다. \
+그러나 뒷부분이 아니라 앞에 추가하고 싶을 때는 \
+unshift()를 사용하면 앞에 추가가 된다.
+
+
+## 배열에 데이터 삭제
+fillter 함수를 사용하면 해당 조건에 맞는 데이터를 지울 수 있다.
+```
+//예제
+const 배열변수명 = 배열변수명.filter((아이템) => 아이템 !== 타겟값);
+//실사용법
+const LikeCount = LikeCount.filter((item)=> item !== targetLikeCount);
+```
+이것의 단점이 있는데, 값이 같은 것들은 다 삭제가 된다는 것이다.\
+아이덴티티도 같은 것을 지울 수 있게 아이덴티티도 정의하는 번거로움이 있다.\
+
+그 이외에 다른 방법이 있는데\
+splice(타겟값,1); 함수다.\
+타겟값으로는 배열의 순서가 같다면 0,1,2,3,4,5등이 올수 있고,\
+i라는 매개변수를 받아와서 사용하면 된다.
+
