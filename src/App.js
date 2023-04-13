@@ -4,30 +4,31 @@ import "./App.css";
 import { useState } from "react";
 
 function App() {
-    let [title, setTitle] = useState(["남자 코트 추천", "강남역 맛집", "반드시 해낸다"]);
-    let [likeCount, setLikeCount] = useState([0, 0, 0]);
-    const [date, setDate] = useState(["2018-01-14", "2022-06-04", "2022-06-05"]);
-    const [modal, setModal] = useState([false,false,false]);
+    const [post,setPost] = useState([
+        {
+            title : "남자 코트 추천",
+            likeCount : 0,
+            date : "2018-01-14",
+            content: "코트는 롱코트!",
+            modal : false
+        },
+        {
+            title : "강남역 맛집",
+            likeCount : 0,
+            date : "2022-06-04",
+            content: "강남역은 사람 많아요...!",
+            modal : false
+        },
+        {
+            title : "반드시 해낸다",
+            likeCount : 0,
+            date : "2022-06-05",
+            content : "난 반드시 해내는 사람임!",
+            modal : false
+        }
+    ])
     const [valueChange,setValueChange] = useState("");
-
-    //function 만들기 다른 형식
-    const onDelete = (targetTitle,targetLikeCount,targetCopyDate,i) =>{
-        //원본 유지 데이터 카피
-        let copyTitle = [...title];
-        let copyLikeCount = [...likeCount];
-        let copyDate = [...date];
-        //삭제
-        copyTitle = copyTitle.filter((item)=> item !== targetTitle);
-        copyLikeCount = copyLikeCount.filter((item)=> item !== targetLikeCount);
-        copyDate.splice(i,1);
-        //적용
-        setTitle(copyTitle);
-        setLikeCount(copyLikeCount);
-        setDate(copyDate);
-
-        //아이덴티티가 없어서 중복되는거 다 삭제하는 부작용!
-    }
-
+    let date = new Date();
     return (
         <div className="App">
             <div className="black-nav">
@@ -37,36 +38,43 @@ function App() {
                 정렬
             </button>
 
-            {title.map(function (element, i) {
+            {
+            post&&post.map(function (element, i) {
                 return (
                     <div className="list" key={i}>
-                        <h4 onClick={() => { 
-                            let copyModal = [...modal];
-                            copyModal[i] = !copyModal[i];
-                            setModal(copyModal);
+                        <h4 onClick={()=>{
+                            //배열 안의 객체를 복사하는 방법
+                            let copyPost = JSON.parse(JSON.stringify(post));
+                            copyPost[i].modal = !element.modal;           
+                            setPost(copyPost);
+                        }}>
+                            {element.title}
+                            <span onClick={(e)=>{
+                                //좋아요 횟수 카운트 업
+                                e.stopPropagation();
+                                const copyPost = JSON.parse(JSON.stringify(post));
+                                const copyElement = JSON.parse(JSON.stringify(element));
+                                copyElement.likeCount += 1;
+                                copyPost[i] = copyElement;
+                                setPost(copyPost);
                             }}>
-                            {element}
-                            <span onClick={(e) => { e.stopPropagation();
-                                let copyCount = [...likeCount];
-                                copyCount[i] = copyCount[i] + 1;
-                                setLikeCount(copyCount);
-                             }}>
                                 👍
                             </span>
-                            {likeCount[i]}
-                            <button 
-                                style={{marginLeft:"20px"}} 
-                                onClick={(e)=>{
-                                    e.stopPropagation();
-                                    onDelete(title[i],likeCount[i],date[i],i);
+                            {element.likeCount}
+                            <button style={{marginLeft:"20px"}} onClick={(e)=>{
+                                e.stopPropagation();
+                                const copyPost = JSON.parse(JSON.stringify(post));
+                                //삭제 방법1
+                                copyPost.splice(i,1);
+                                setPost(copyPost);
                             }}>삭제</button>
                         </h4>
                         <p>
-                            {date[i]} 발행
+                            {element.date} 발행
                         </p>
             {
                 //조건시 ? 참일때 실행할 코드 : 거짓일 때 실행할 코드
-                modal[i] === true ? <Modal postTitle = {title} setTitle = {setTitle} i = {i} /> : null
+                element.modal === true ? <Modal element = {element} post= {post} setPost = {setPost} valueChange = {valueChange} setValueChange = {setValueChange} i = {i} /> : null
             }
                         
                     </div>
@@ -77,16 +85,19 @@ function App() {
 
         <form action="get">
             <input onChange={(e) => {setValueChange(e.target.value);}} minLength="1"/>
-            <button type="submit" onClick={()=>{
-                const copyTitle = [...title];
-                const copyDate = [...date];
-                const copyLikeCount = [...likeCount];
-                copyLikeCount.unshift(0);
-                copyTitle.unshift(valueChange);
-                copyDate.unshift("2023-04-12");
-                setLikeCount(copyLikeCount);
-                setDate(copyDate);
-                setTitle(copyTitle);
+            <button type="submit" onClick={(e)=>{
+                //새로고침 방지
+                e.preventDefault();
+                const copyPost = JSON.parse(JSON.stringify(post));
+                const newPost = {
+                    title : valueChange,
+                    likeCount : 0,
+                    date : `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`,
+                    content : "해당 게시글은 그냥 만들어졌습니다. 아직 콘텐츠 내용 추가 안만듬.",
+                    modal : false
+                };
+                copyPost.unshift(newPost);
+                setPost(copyPost);
             }}>작성</button>
         </form>
            
@@ -97,18 +108,27 @@ function App() {
 function Modal(props) {
     return (
         <div className="modal">
-            <h4>{props.postTitle[props.i]}</h4>
-            <p>날짜</p>
-            <p>상세내용</p>
-            <button onClick={() => {
-                                    let copyTitle = [...props.postTitle];
-                                    copyTitle[props.i] = "여자 코트 추천";
-                                    props.setTitle(copyTitle);
-                                }}>
-                                제목 수정
-            </button>
+            <h4>{props.element.title}</h4>
+            <p>{props.element.date}</p>
+            <p>{props.element.content}</p>
+            <form action="get">
+                <input onChange={(e)=>{props.setValueChange(e.target.value)}} minLength="1"/>
+                <button type="submit" onClick={(e) => {
+                                        // //배열 안의 객체를 복사하는 방법
+                                        e.preventDefault();
+                                        let copyElement = JSON.parse(JSON.stringify(props.element));
+                                        let copyPost = JSON.parse(JSON.stringify(props.post));
+                                        copyElement.title = props.valueChange;
+                                        copyPost[props.i] = copyElement;
+                                        props.setPost(copyPost);
+                                    }}>
+                                    제목 수정
+                </button>
+            </form>
         </div>
     );
 }
 
 export default App;
+
+
